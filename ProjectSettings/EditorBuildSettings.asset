@@ -5,20 +5,20 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AssetCheckScene.unity
     guid: 037417d5943806e4cb8b38b8682c136c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SignInScene.unity
     guid: b1cd6d3d5dfec6d439ac5cce85ab5821
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SignUpScene.unity
     guid: dcaf60888045c1840b7d4c7052f4cadd
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 9566ec9fbead71045bac0f43306fe3e8
   - enabled: 1
-    path: Assets/Scenes/VisualMotor/Lv1.unity
+    path: Assets/Scenes/VisualMotor/Lv2.unity
     guid: 1eb4859865cb10b4aa3efb6adaaa247b
   - enabled: 1
     path: Assets/Scenes/SpaceLocation/Lv1_UpsideDown.unity
