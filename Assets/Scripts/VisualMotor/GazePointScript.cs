@@ -61,8 +61,9 @@ public class GazePointScript : MonoBehaviour
         }
 
          // 애니메이션 상태를 검사
-        if (targetAnimator.GetCurrentAnimatorStateInfo(0).IsName("penguinMove"))
-        {
+        if (targetAnimator.GetCurrentAnimatorStateInfo(0).IsName("penguinMove")||
+        targetAnimator.GetCurrentAnimatorStateInfo(0).IsName("penguinMove2")||
+        targetAnimator.GetCurrentAnimatorStateInfo(0).IsName("sealMove"))        {
             if (targetAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
             {
                 if (!isAnimationEnded)

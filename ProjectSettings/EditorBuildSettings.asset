@@ -15,11 +15,35 @@ EditorBuildSettings:
     path: Assets/Scenes/SignUpScene.unity
     guid: dcaf60888045c1840b7d4c7052f4cadd
   - enabled: 1
+    path: Assets/Scenes/SurveyScene.unity
+    guid: 8ab9165027bed4740bf7ee80572943c0
+  - enabled: 1
+    path: Assets/Scenes/TutorialScene.unity
+    guid: a2a94cd3ce77ea04982cb2381725c278
+  - enabled: 1
+    path: Assets/Scenes/TutorialScene2.unity
+    guid: 84a56b5183bf7ff43901b68784f1cc3d
+  - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 9566ec9fbead71045bac0f43306fe3e8
   - enabled: 1
-    path: Assets/Scenes/VisualMotor/Lv2.unity
+    path: Assets/Scenes/VisualMotor/Lv1.unity
     guid: 1eb4859865cb10b4aa3efb6adaaa247b
+  - enabled: 1
+    path: Assets/Scenes/VisualMotor/Lv2.unity
+    guid: 860dd2ae8ef92df44856df2478787dba
+  - enabled: 1
+    path: Assets/Scenes/VisualMotor/Lv3.unity
+    guid: 3255cdab549fe7d4680361ce4b2f638d
+  - enabled: 1
+    path: Assets/Scenes/FG/Lv1_FindStar.unity
+    guid: 81aa2109a05d54c238f8addbda65672f
+  - enabled: 1
+    path: Assets/Scenes/FG/Lv2_FindHeart.unity
+    guid: 9fa51cc69881044edbb68e6190d96db9
+  - enabled: 1
+    path: Assets/Scenes/FG/Lv3_GiraffeDiff.unity
+    guid: 10f8bcf9a393744be9d337baa49e0b16
   - enabled: 1
     path: Assets/Scenes/SpaceLocation/Lv1_UpsideDown.unity
     guid: 656491c3570a948da90e5a2560a97296
@@ -29,6 +53,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SpaceLocation/Lv3_FindSame.unity
     guid: 97fc17ad48a5d4e8e99a48f1268ab717
+  - enabled: 1
+    path: Assets/Scenes/PC/Lv1_FindDolphin.unity
+    guid: 4b5e4c544106a4ca2839a88c91f5bcef
+  - enabled: 1
+    path: Assets/Scenes/PC/Lv2_FindHidden.unity
+    guid: 1a2c2e16bc8d943cb8744f8301ec5f58
+  - enabled: 1
+    path: Assets/Scenes/PC/Lv3_FindBox.unity
+    guid: fa8238c9300af4e8b9c6d4e86b3531da
+  - enabled: 1
+    path: Assets/Scenes/SR/Lv2_FindDiffSquirrel.unity
+    guid: f323cb8f0332e403f819b9a38885f1d2
+  - enabled: 1
+    path: Assets/Scenes/SR/Lv3_FindDiffHouse.unity
+    guid: d7a7dcef5c3244c51bdf3f4154ded6c2
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 5e3bd2f346e1759478417514434eaeb8, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 627f62076f4acd54abdc9dbada4bbd3a, type: 2}

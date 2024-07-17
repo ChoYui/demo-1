@@ -57,7 +57,7 @@ public class SignInManager : MonoBehaviour
             if (snapshot.Exists)
             {
                 UserDataManager.Instance.SetUserDocument(snapshot);
-                SceneManager.LoadScene("MainScene");
+                SceneManager.LoadScene("TutorialScene");
             }
             else
             {
