@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
+
 
 public class FindDolphin : MonoBehaviour
 {
@@ -16,6 +18,18 @@ public class FindDolphin : MonoBehaviour
     // 이미지 오브젝트 설정
     private GameObject msg_congrate;
     private GameObject msg_retry;
+
+    public AudioSource backgroundMusicSource;
+
+    public AudioClip failSound; // 실패 시 재생할 음성
+
+    public AudioClip successSound; // 성공 시 재생할 음성
+
+    public string nextSceneName; // 전환할 씬 이름
+
+    private AudioSource audioSource;
+
+
 
     // 난수 들어갈 변수
     private int random;
@@ -42,6 +56,14 @@ public class FindDolphin : MonoBehaviour
         // msg_congrate, msg_retry 오브젝트를 비활성화
         msg_congrate.SetActive(false);
         msg_retry.SetActive(false);
+
+        // AudioSource 컴포넌트 가져오기
+        audioSource = GetComponent<AudioSource>();
+
+        GameObject bgmObject = GameObject.Find("AudioManager");
+        backgroundMusicSource = bgmObject.GetComponent<AudioSource>();
+
+
 
         // 난수 생성
         random = UnityEngine.Random.Range(0, 4);
@@ -106,6 +128,7 @@ public class FindDolphin : MonoBehaviour
         // 정답 판정    
         if (selected == answer)
         {
+            msg_retry.SetActive(false);
             // 정답 판정 시, msg_congrate 오브젝트를 활성화
             msg_congrate.SetActive(true);
 
@@ -114,8 +137,13 @@ public class FindDolphin : MonoBehaviour
 
             IEnumerator DisableMsgCongrate()
             {
-                yield return new WaitForSeconds(1.0f);
-                msg_congrate.SetActive(false);
+                backgroundMusicSource.Stop();
+                audioSource.clip = successSound;
+                audioSource.Play();
+                msg_congrate.SetActive(true);
+
+                yield return new WaitForSeconds(successSound.length);
+                
             }
             // 종료 시간 저장
             endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
@@ -130,6 +158,8 @@ public class FindDolphin : MonoBehaviour
         // 오답 판정
         else
         {
+            msg_congrate.SetActive(false);
+            
             // 오답 판정 시, msg_retry 오브젝트를 활성화하고, 1초 후 비활성화
             msg_retry.SetActive(true);
 
@@ -137,7 +167,11 @@ public class FindDolphin : MonoBehaviour
 
             IEnumerator DisableMsgRetry()
             {
-                yield return new WaitForSeconds(1.0f);
+                audioSource.clip = failSound;
+                audioSource.Play();
+                // 실패 음성 길이만큼 대기
+                yield return new WaitForSeconds(failSound.length);
+
                 msg_retry.SetActive(false);
             }
         }

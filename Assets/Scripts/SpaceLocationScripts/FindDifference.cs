@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
+
 
 public class FindDifference : MonoBehaviour
 {
@@ -19,6 +21,18 @@ public class FindDifference : MonoBehaviour
     // 메시지 오브젝트 설정
     private GameObject msg_congrate;
     private GameObject msg_retry;
+
+    public AudioSource backgroundMusicSource;
+
+    public AudioClip failSound; // 실패 시 재생할 음성
+
+    public AudioClip successSound; // 성공 시 재생할 음성
+
+    public string nextSceneName; // 전환할 씬 이름
+
+    private AudioSource audioSource;
+
+
 
     // 문제 배치
     // 난수 생성을 통해 0 ~ 2 숫자 중 정답을 설정
@@ -35,6 +49,13 @@ public class FindDifference : MonoBehaviour
         // msg_congrate, msg_retry 오브젝트를 비활성화
         msg_congrate.SetActive(false);
         msg_retry.SetActive(false);
+
+        // AudioSource 컴포넌트 가져오기
+        audioSource = GetComponent<AudioSource>();
+
+        GameObject bgmObject = GameObject.Find("AudioManager");
+        backgroundMusicSource = bgmObject.GetComponent<AudioSource>();
+
 
         // 난수 생성
         answer = UnityEngine.Random.Range(0, 3);
@@ -97,6 +118,8 @@ public class FindDifference : MonoBehaviour
         // 정답 판정    
         if (selected == answer)
         {
+            msg_retry.SetActive(false);
+
             // 정답 판정 시, msg_congrate 오브젝트를 활성화
             msg_congrate.SetActive(true);
 
@@ -105,8 +128,13 @@ public class FindDifference : MonoBehaviour
 
             IEnumerator DisableMsgCongrate()
             {
-                yield return new WaitForSeconds(1.0f);
-                msg_congrate.SetActive(false);
+                backgroundMusicSource.Stop();
+                audioSource.clip = successSound;
+                audioSource.Play();
+                msg_congrate.SetActive(true);
+
+                yield return new WaitForSeconds(successSound.length);
+                
             }
             // 종료 시간 저장
             endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
@@ -121,6 +149,7 @@ public class FindDifference : MonoBehaviour
         // 오답 판정
         else
         {
+            msg_congrate.SetActive(false);
             // 오답 판정 시, msg_retry 오브젝트를 활성화하고, 1초 후 비활성화
             msg_retry.SetActive(true);
 
@@ -128,7 +157,11 @@ public class FindDifference : MonoBehaviour
 
             IEnumerator DisableMsgRetry()
             {
-                yield return new WaitForSeconds(1.0f);
+                audioSource.clip = failSound;
+                audioSource.Play();
+                // 실패 음성 길이만큼 대기
+                yield return new WaitForSeconds(failSound.length);
+
                 msg_retry.SetActive(false);
             }
         }

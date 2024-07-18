@@ -142,26 +142,26 @@ public class FindStar : MonoBehaviour
                 // CalculateProgressScore("fg", 0, startTime, endTime, tryCount, concentrationScore );
 
                 // 게임 종료 코드 추가
-                // 기존 배경음악 정지
-                backgroundMusicSource.Stop();
-                audioSource.clip = endSound;
-                audioSource.Play();
 
-                msg_end.SetActive(true);
-                msg_congrate.SetActive(false);
+                StartCoroutine(ShowEnd());
+                
 
                  // 음성이 끝날 때까지 대기하고 씬 전환
                 StartCoroutine(WaitForSoundAndLoadScene());
             }
+            else
+            {
+                msg_retry.SetActive(false);
+                msg_congrate.SetActive(true);
+                StartCoroutine(ShowCongrate());
+            }
 
-            msg_congrate.SetActive(true);
-            StartCoroutine(ShowCongrate());
             clkedObj.SetActive(false);
-
 
         }
         else if (clkedObj.name == "btn_animal")
         {
+            msg_congrate.SetActive(false);
             msg_retry.SetActive(true);
             StartCoroutine(ShowRetry());
         }
@@ -198,6 +198,18 @@ public class FindStar : MonoBehaviour
 
         msg_retry.SetActive(false);
     }
+    IEnumerator ShowEnd()
+    {
+        backgroundMusicSource.Stop();
+        audioSource.clip = endSound;
+        audioSource.Play();
+        msg_end.SetActive(true);
+         // 음성 길이만큼 대기
+        yield return new WaitForSeconds(endSound.length);
+
+        
+    }
+
 
 
     void Update()

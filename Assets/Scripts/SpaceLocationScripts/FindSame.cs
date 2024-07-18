@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
+
 
 public class FindSame : MonoBehaviour
 {
@@ -20,6 +22,16 @@ public class FindSame : MonoBehaviour
     // 메시지 오브젝트 설정
     private GameObject msg_congrate;
     private GameObject msg_retry;
+
+    public AudioSource backgroundMusicSource;
+
+    public AudioClip failSound; // 실패 시 재생할 음성
+
+    public AudioClip successSound; // 성공 시 재생할 음성
+
+    public string nextSceneName; // 전환할 씬 이름
+
+    private AudioSource audioSource;
 
     // 정답 들어갈 변수
     private int answer;
@@ -36,6 +48,14 @@ public class FindSame : MonoBehaviour
         // msg_congrate, msg_retry 오브젝트를 비활성화
         msg_congrate.SetActive(false);
         msg_retry.SetActive(false);
+
+        // AudioSource 컴포넌트 가져오기
+        audioSource = GetComponent<AudioSource>();
+
+        GameObject bgmObject = GameObject.Find("AudioManager");
+        backgroundMusicSource = bgmObject.GetComponent<AudioSource>();
+
+
 
 
         // 정답이 될 선택지 1개를 랜덤하게 선택
@@ -101,7 +121,8 @@ public class FindSame : MonoBehaviour
         // 정답 판정    
         if (selected == answer)
         {
-            // 정답 판정 시, msg_congrate 오브젝트를 활성화
+            msg_retry.SetActive(false);
+             // 정답 판정 시, msg_congrate 오브젝트를 활성화
             msg_congrate.SetActive(true);
 
             // msg_congrate 오브젝트를 1초 후 비활성화
@@ -109,8 +130,13 @@ public class FindSame : MonoBehaviour
 
             IEnumerator DisableMsgCongrate()
             {
-                yield return new WaitForSeconds(1.0f);
-                msg_congrate.SetActive(false);
+                backgroundMusicSource.Stop();
+                audioSource.clip = successSound;
+                audioSource.Play();
+                msg_congrate.SetActive(true);
+
+                yield return new WaitForSeconds(successSound.length);
+                
             }
             // 종료 시간 저장
             endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
@@ -120,11 +146,14 @@ public class FindSame : MonoBehaviour
             // CalculateProgressScore("sp", 2, startTime, endTime, tryCount, concentrationScore, attentionScore );
 
             // 게임 종료 코드 추가
+            //SceneManager.LoadScene(nextSceneName);
 
         }
         // 오답 판정
         else
         {
+            msg_congrate.SetActive(false);
+
             // 오답 판정 시, msg_retry 오브젝트를 활성화하고, 1초 후 비활성화
             msg_retry.SetActive(true);
 
@@ -132,7 +161,11 @@ public class FindSame : MonoBehaviour
 
             IEnumerator DisableMsgRetry()
             {
-                yield return new WaitForSeconds(1.0f);
+                audioSource.clip = failSound;
+                audioSource.Play();
+                // 실패 음성 길이만큼 대기
+                yield return new WaitForSeconds(failSound.length);
+
                 msg_retry.SetActive(false);
             }
         }
