@@ -5,9 +5,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class FindHeart : MonoBehaviour
 {
+    // 초기 시간, 종료 시간을 저장 할 변수
+    private int startTime;
+    private float endTime;
+
+    // 시도 횟수를 저장 할 변수
+    private int tryCount = 0;
+
     public GameObject btn_animal;
     public GameObject btn_heart;
     public GameObject btn_dummy_1;
@@ -27,6 +35,9 @@ public class FindHeart : MonoBehaviour
 
     void Start()
     {
+        // 시작 시간 설정
+        startTime = int.Parse(DateTime.Now.ToString("HHmmss"));
+
         // 각 오브젝트를 씬에서 찾아서 할당
         // 오브젝트는 FindHeartCanvas의 자식으로 들어가 있어용
         btn_animal = GameObject.Find("FindHeartCanvas/btn_animal");
@@ -49,10 +60,10 @@ public class FindHeart : MonoBehaviour
         // xRandomRange = 4.4f;
         // yRandomRange = 2f;
 
-        starPos[0] = new Vector3(Random.Range(xRandomRange, -xRandomRange), Random.Range(yRandomRange, -yRandomRange), 0);
-        starPos[1] = new Vector3(Random.Range(xRandomRange, -xRandomRange), Random.Range(yRandomRange, -yRandomRange), 0);
-        starPos[2] = new Vector3(Random.Range(xRandomRange, -xRandomRange), Random.Range(yRandomRange, -yRandomRange), 0);
-        starPos[3] = new Vector3(Random.Range(xRandomRange, -xRandomRange), Random.Range(yRandomRange, -yRandomRange), 0);
+        starPos[0] = new Vector3(UnityEngine.Random.Range(xRandomRange, -xRandomRange), UnityEngine.Random.Range(yRandomRange, -yRandomRange), 0);
+        starPos[1] = new Vector3(UnityEngine.Random.Range(xRandomRange, -xRandomRange), UnityEngine.Random.Range(yRandomRange, -yRandomRange), 0);
+        starPos[2] = new Vector3(UnityEngine.Random.Range(xRandomRange, -xRandomRange), UnityEngine.Random.Range(yRandomRange, -yRandomRange), 0);
+        starPos[3] = new Vector3(UnityEngine.Random.Range(xRandomRange, -xRandomRange), UnityEngine.Random.Range(yRandomRange, -yRandomRange), 0);
 
         RectTransform heartRectTransform = btn_heart.GetComponent<RectTransform>();
         RectTransform dummy1RectTransform = btn_dummy_1.GetComponent<RectTransform>();
@@ -70,6 +81,8 @@ public class FindHeart : MonoBehaviour
     // touch 된게 animal이면, retry 메세지를 1초 동안  띄운다.
     public void btnClicked()
     {
+        tryCount++;
+
         GameObject clkedObj = EventSystem.current.currentSelectedGameObject;
         Debug.Log("Clicked Object Name: " + clkedObj.name);
 
@@ -77,7 +90,14 @@ public class FindHeart : MonoBehaviour
         {
             msg_congrate.SetActive(true);
             StartCoroutine(ShowCongrate());
-            // clkedObj.SetActive(false);
+
+            endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
+
+            // DB에 저장하는 함수 호출
+            // concentrationScore 아직 미구현
+            // CalculateProgressScore("fg", 1, startTime, endTime, tryCount, concentrationScore );
+
+            // 게임 종료 코드 추가
         }
         else if (clkedObj.name == "btn_dummy_1" || clkedObj.name == "btn_dummy_2" || clkedObj.name == "btn_dummy_3" || clkedObj.name == "btn_animal")
         {

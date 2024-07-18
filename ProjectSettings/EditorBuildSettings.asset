@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/SignUpScene.unity
     guid: dcaf60888045c1840b7d4c7052f4cadd
   - enabled: 1
-    path: Assets/Scenes/SurveyScene.unity
-    guid: 8ab9165027bed4740bf7ee80572943c0
-  - enabled: 1
     path: Assets/Scenes/TutorialScene.unity
     guid: a2a94cd3ce77ea04982cb2381725c278
   - enabled: 1
@@ -45,13 +42,13 @@ EditorBuildSettings:
     path: Assets/Scenes/FG/Lv3_GiraffeDiff.unity
     guid: 10f8bcf9a393744be9d337baa49e0b16
   - enabled: 1
-    path: Assets/Scenes/SpaceLocation/Lv1_UpsideDown.unity
+    path: Assets/Scenes/SP/Lv1_UpsideDown.unity
     guid: 656491c3570a948da90e5a2560a97296
   - enabled: 1
-    path: Assets/Scenes/SpaceLocation/Lv2_FindDifference.unity
+    path: Assets/Scenes/SP/Lv2_FindDifference.unity
     guid: d7f79992bfbfb4665a41540b53ee3a9c
   - enabled: 1
-    path: Assets/Scenes/SpaceLocation/Lv3_FindSame.unity
+    path: Assets/Scenes/SP/Lv3_FindSame.unity
     guid: 97fc17ad48a5d4e8e99a48f1268ab717
   - enabled: 1
     path: Assets/Scenes/PC/Lv1_FindDolphin.unity

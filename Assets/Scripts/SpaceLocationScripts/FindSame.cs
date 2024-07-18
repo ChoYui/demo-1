@@ -6,9 +6,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class FindSame : MonoBehaviour
 {
+    // 초기 시간, 종료 시간을 저장 할 변수
+    private int startTime;
+    private float endTime;
+
+    // 시도 횟수를 저장 할 변수
+    private int tryCount = 0;
+
     // 메시지 오브젝트 설정
     private GameObject msg_congrate;
     private GameObject msg_retry;
@@ -18,6 +26,9 @@ public class FindSame : MonoBehaviour
 
     void Start()
     {
+        // 시작 시간 저장
+        startTime = int.Parse(DateTime.Now.ToString("HHmmss"));
+
         // 메시지 오브젝트 설정
         msg_congrate = GameObject.Find("FindSameCanvas/msg_congrate");
         msg_retry = GameObject.Find("FindSameCanvas/msg_retry");
@@ -36,13 +47,6 @@ public class FindSame : MonoBehaviour
             MoveObjectToRandomPosition(i, answer);
         }
 
-
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
 
     }
 
@@ -87,16 +91,17 @@ public class FindSame : MonoBehaviour
         GameObject btn_option_n = GameObject.Find("FindSameCanvas/btn_option_" + index);
         btn_option_n.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => CheckAnswer(index));
     }
+    // 정답, 오답 판정
     public void CheckAnswer(int selected)
     {
         // 디버깅 메시지
-        Debug.Log("selected: " + selected + ", answer: " + answer);
+        // Debug.Log("selected: " + selected + ", answer: " + answer);
+        tryCount++;
 
-        // 정답 판정
+        // 정답 판정    
         if (selected == answer)
         {
             // 정답 판정 시, msg_congrate 오브젝트를 활성화
-            // GameObject msg_congrate = GameObject.Find("UpsideDownCanvas/msg_congrate");
             msg_congrate.SetActive(true);
 
             // msg_congrate 오브젝트를 1초 후 비활성화
@@ -107,13 +112,20 @@ public class FindSame : MonoBehaviour
                 yield return new WaitForSeconds(1.0f);
                 msg_congrate.SetActive(false);
             }
+            // 종료 시간 저장
+            endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
+
+            // DB에 저장하는 함수 호출
+            // attentionScore는 아직 미구현
+            // CalculateProgressScore("sp", 2, startTime, endTime, tryCount, concentrationScore, attentionScore );
+
+            // 게임 종료 코드 추가
 
         }
         // 오답 판정
         else
         {
             // 오답 판정 시, msg_retry 오브젝트를 활성화하고, 1초 후 비활성화
-            // GameObject msg_retry = GameObject.Find("UpsideDownCanvas/msg_retry");
             msg_retry.SetActive(true);
 
             StartCoroutine(DisableMsgRetry());

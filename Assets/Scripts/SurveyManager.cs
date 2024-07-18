@@ -1,19 +1,17 @@
 // 사용자 최초 가입 시 설문조사 화면을 진행하는 스트립트
 // 설문조사를 진행하면서 사용자가 입력한 정보를 변수에 저장한다.
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
 
-// TODO
-// 설문 결과 변수 
-// FinishButton 리스너 추가
-public class SurveyMamager : MonoBehaviour
+public class SurveyManager : MonoBehaviour
 {
     // Question_1 ~ Question_8 오브젝트를 배열로 저장
+    public GameObject Panel;
     private GameObject[] Questions;
+    public static int initialProgressScore = 0;
 
     // alert 창을 저장할 변수
     private GameObject Alert;
@@ -49,24 +47,24 @@ public class SurveyMamager : MonoBehaviour
         SurveyResult = new int[8];
 
         // alert 창을 찾아서 변수에 저장
-        Alert = GameObject.Find("SurveyCanvas/bg_popup/alert_popup");
+        Alert = GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/alert_popup");
 
         // QuestionIndex 변수 초기화
         QuestionIndex = 0;
 
         // 다음, 이전 버튼을 찾아서 변수에 저장
-        NextButton = GameObject.Find("SurveyCanvas/btn_next").GetComponent<Button>();
-        PrevButton = GameObject.Find("SurveyCanvas/btn_prev").GetComponent<Button>();
-        FinishButton = GameObject.Find("SurveyCanvas/btn_finish").GetComponent<Button>();
+        NextButton = GameObject.Find("Main Camera/Canvas/SurveyPanel/btn_next").GetComponent<Button>();
+        PrevButton = GameObject.Find("Main Camera/Canvas/SurveyPanel/btn_prev").GetComponent<Button>();
+        FinishButton = GameObject.Find("Main Camera/Canvas/SurveyPanel/btn_finish").GetComponent<Button>();
 
         // 토글 버튼을 찾아서 변수에 저장
-        Q2_yes_no_Toggle = GameObject.Find("SurveyCanvas/bg_popup/Question_2/yes_no_toggle").GetComponent<ToggleGroup>();
-        Q3_yes_no_Toggle = GameObject.Find("SurveyCanvas/bg_popup/Question_3/yes_no_toggle").GetComponent<ToggleGroup>();
-        Q3_level_Toggle = GameObject.Find("SurveyCanvas/bg_popup/Question_3/level_toggle").GetComponent<ToggleGroup>();
+        Q2_yes_no_Toggle = GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_2/yes_no_toggle").GetComponent<ToggleGroup>();
+        Q3_yes_no_Toggle = GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_3/yes_no_toggle").GetComponent<ToggleGroup>();
+        Q3_level_Toggle = GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_3/level_toggle").GetComponent<ToggleGroup>();
 
         // 기본값으로 input_IQ, level_toggle 비활성화
-        GameObject.Find("SurveyCanvas/bg_popup/Question_2/input_IQ").SetActive(false);
-        GameObject.Find("SurveyCanvas/bg_popup/Question_3/level_toggle").SetActive(false);
+        GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_2/input_IQ").SetActive(false);
+        GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_3/level_toggle").SetActive(false);
 
         // alert 창 비활성화
         Alert.SetActive(false);
@@ -78,12 +76,12 @@ public class SurveyMamager : MonoBehaviour
                 // "Yes" 버튼이 선택되면 IQ 입력창을 활성화합니다.
                 if (toggle.name == "yes")
                 {
-                    GameObject.Find("SurveyCanvas/bg_popup/Question_2/input_IQ").SetActive(true);
+                    GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_2/input_IQ").SetActive(true);
                 }
                 // "No" 버튼이 선택되면 IQ 입력창을 비활성화합니다.
                 else
                 {
-                    GameObject.Find("SurveyCanvas/bg_popup/Question_2/input_IQ").SetActive(false);
+                    GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_2/input_IQ").SetActive(false);
                 }
             });
         }
@@ -95,12 +93,12 @@ public class SurveyMamager : MonoBehaviour
                 // "Yes" 버튼이 선택되면 level_toggle 토글을 활성화합니다.
                 if (toggle.name == "yes")
                 {
-                    GameObject.Find("SurveyCanvas/bg_popup/Question_3/level_toggle").SetActive(true);
+                    GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_3/level_toggle").SetActive(true);
                 }
                 // "No" 버튼이 선택되면 level_toggle 토글을 비활성화합니다.
                 else
                 {
-                    GameObject.Find("SurveyCanvas/bg_popup/Question_3/level_toggle").SetActive(false);
+                    GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_3/level_toggle").SetActive(false);
                 }
             });
         }
@@ -111,7 +109,7 @@ public class SurveyMamager : MonoBehaviour
         Questions = new GameObject[8];
         for (int i = 0; i < 8; i++)
         {
-            Questions[i] = GameObject.Find("SurveyCanvas/bg_popup/Question_" + (i + 1));
+            Questions[i] = GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_" + (i + 1));
             // Question_2 ~ Question_8 오브젝트 비활성화
             Questions[i].SetActive(false);
         }
@@ -138,7 +136,7 @@ public class SurveyMamager : MonoBehaviour
         if (QuestionIndex == 0)
         {
             // 출생년도 입력값 null이거나 정수가 아니면 popup 창을 띄워줌
-            if (GameObject.Find("SurveyCanvas/bg_popup/Question_1/input_year").GetComponent<TMP_InputField>().text == "")
+            if (GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_1/input_year").GetComponent<TMP_InputField>().text == "")
             {
                 Alert.SetActive(true);
                 StartCoroutine(AlertPopup());
@@ -146,10 +144,10 @@ public class SurveyMamager : MonoBehaviour
             }
             else
             {
-                birth_year = int.Parse(GameObject.Find("SurveyCanvas/bg_popup/Question_1/input_year").GetComponent<TMP_InputField>().text);
+                birth_year = int.Parse(GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_1/input_year").GetComponent<TMP_InputField>().text);
             }
             // Q1 성별 체크
-            if (GameObject.Find("SurveyCanvas/bg_popup/Question_1/gender_toggle").GetComponent<ToggleGroup>().ActiveToggles().FirstOrDefault().name == "male")
+            if (GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_1/gender_toggle").GetComponent<ToggleGroup>().ActiveToggles().FirstOrDefault().name == "male")
             {
                 SurveyResult[0] = 1;
             }
@@ -166,7 +164,7 @@ public class SurveyMamager : MonoBehaviour
             {
                 SurveyResult[1] = 1;
                 // IQ 입력값 null이거나 정수가 아니면 popup 창을 띄워줌
-                if (GameObject.Find("SurveyCanvas/bg_popup/Question_2/input_IQ").GetComponent<TMP_InputField>().text == "" || !int.TryParse(GameObject.Find("SurveyCanvas/bg_popup/Question_2/input_IQ").GetComponent<TMP_InputField>().text, out input_IQ))
+                if (GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_2/input_IQ").GetComponent<TMP_InputField>().text == "" || !int.TryParse(GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_2/input_IQ").GetComponent<TMP_InputField>().text, out input_IQ))
                 {
                     Alert.SetActive(true);
                     StartCoroutine(AlertPopup());
@@ -174,7 +172,7 @@ public class SurveyMamager : MonoBehaviour
                 }
                 else
                 {
-                    input_IQ = int.Parse(GameObject.Find("SurveyCanvas/bg_popup/Question_2/input_IQ").GetComponent<TMP_InputField>().text);
+                    input_IQ = int.Parse(GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_2/input_IQ").GetComponent<TMP_InputField>().text);
                 }
             }
             else
@@ -217,7 +215,7 @@ public class SurveyMamager : MonoBehaviour
         // Q2 부턴 yes_no_toggle을 SurveyResult에 저장
         else if (QuestionIndex >= 3)
         {
-            if (GameObject.Find("SurveyCanvas/bg_popup/Question_" + (QuestionIndex + 1) + "/yes_no_toggle").GetComponent<ToggleGroup>().ActiveToggles().FirstOrDefault().name == "yes")
+            if (GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_" + (QuestionIndex + 1) + "/yes_no_toggle").GetComponent<ToggleGroup>().ActiveToggles().FirstOrDefault().name == "yes")
             {
                 SurveyResult[QuestionIndex] = 1;
             }
@@ -281,16 +279,20 @@ public class SurveyMamager : MonoBehaviour
     // 완료 버튼을 누르면 실행되는 함수 선언
     public void FinishSurvey()
     {
-        // 설문 결과를 저장하는 SurveyResult 배열을 출력
-        for (int i = 0; i < 8; i++)
+        // 초기 100에서 설문조사로 구해진 뺄 값을 저장하는 변수
+        int progressScoreOffset = 0;
+
+        // Survey Result의 3 ~ 7 index에 대한 값을 더한다.
+        for (int i = 3; i < 8; i++)
         {
-            Debug.Log("index : " + i + " value : " + SurveyResult[i]);
+            progressScoreOffset += SurveyResult[i] * 3; // 최대 15점 감점
         }
-        // 변수들 출력
-        Debug.Log("birth_year : " + birth_year);
-        Debug.Log("input_IQ : " + input_IQ);
-        Debug.Log("level_toggle : " + level_toggle);
 
+        // level_toggle에 따라 progressScoreOffset을 더한다.
+        progressScoreOffset += level_toggle * 5; // mild : 5, moderate : 10, severe : 15, profound : 20
+
+        // 초기 진척도 100에서 progressScoreOffset을 뺀 값을 DB에 저장한다.
+        initialProgressScore = 100 - progressScoreOffset;
+        Panel.SetActive(false);
     }
-
 }

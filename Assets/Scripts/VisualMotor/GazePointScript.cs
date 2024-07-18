@@ -1,12 +1,20 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class GazePointScript : MonoBehaviour
 {
     public GameObject gazePoint;     // UI element
     public GameObject targetObject;  // World space object
     public GameObject msg_congrate;
+    public string nextSceneName; // 전환할 씬 이름
+    public string panelName;
+    
+    public AudioSource backgroundMusicSource;
+
+    public AudioClip endSound; // 애니메이션 종료 시 재생할 음성
+    private AudioSource audioSource;
 
     private RectTransform gazeRectTransform;
     private Collider2D targetCollider;
@@ -25,6 +33,12 @@ public class GazePointScript : MonoBehaviour
         // Get the Collider2D and Animator components of the target object
         targetCollider = targetObject.GetComponent<Collider2D>();
         targetAnimator = targetObject.GetComponent<Animator>();
+        // AudioSource 컴포넌트 가져오기
+        audioSource = GetComponent<AudioSource>();
+
+        GameObject bgmObject = GameObject.FindWithTag("AudioManager");
+        backgroundMusicSource = bgmObject.GetComponent<AudioSource>();
+
 
 
     }
@@ -83,7 +97,62 @@ public class GazePointScript : MonoBehaviour
     private void OnAnimationEnd()
     {
         Debug.Log("Animation End");
+
+        // 기존 배경음악 정지
+        backgroundMusicSource.Stop();
+
+        // 음성 재생
+        audioSource.clip = endSound;
+        audioSource.Play();
         msg_congrate.SetActive(true);
+
+
+        // 음성이 끝날 때까지 대기하고 씬 전환
+        StartCoroutine(WaitForSoundAndLoadScene());
     }
+
+    private IEnumerator WaitForSoundAndLoadScene()
+    {
+        // 음성이 끝날 때까지 대기
+        while (audioSource.isPlaying)
+        {
+            yield return null; // 다음 프레임까지 대기
+        }
+
+        // 씬 로드 완료 시 이벤트 구독
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // 씬 전환
+        SceneManager.LoadScene(nextSceneName);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 씬 로드 완료 시 이벤트 구독 해제
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        // 코루틴을 통해 패널 활성화 시도
+        StartCoroutine(ActivatePanel());
+    }
+
+    private IEnumerator ActivatePanel()
+    {
+        // 패널을 찾을 때까지 반복 시도
+        GameObject panel = null;
+        while (panel == null)
+        {
+            panel = GameObject.Find(panelName);
+            if (panel == null)
+            {
+                Debug.LogWarning("Panel not found: " + panelName + ". Retrying...");
+                yield return null; // 다음 프레임까지 대기
+            }
+        }
+
+        // 패널 활성화
+        panel.SetActive(true);
+        Debug.Log("Panel activated: " + panelName);
+    }
+    
 }
 

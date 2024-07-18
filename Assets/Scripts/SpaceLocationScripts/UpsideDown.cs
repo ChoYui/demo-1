@@ -3,9 +3,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
 public class UpsideDown : MonoBehaviour
 {
+    // 초기 시간, 종료 시간을 저장 할 변수
+    private int startTime;
+    private float endTime;
+
+    // 시도 횟수를 저장 할 변수
+    private int tryCount = 0;
+
+    // rotation 변경이 아닌, 뒤집힌 이미지로 이미지 소스 자체를 변경하도록 함
+    // 이미지 오브젝트 설정
+    public Sprite upsideDownImg;
+
     // 메시지 오브젝트 설정
     public GameObject msg_congrate;
     public GameObject msg_retry;
@@ -17,6 +30,9 @@ public class UpsideDown : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // 시작 시간 저장
+        startTime = int.Parse(DateTime.Now.ToString("HHmmss"));
+
         msg_congrate = GameObject.Find("UpsideDownCanvas/msg_congrate");
         msg_retry = GameObject.Find("UpsideDownCanvas/msg_retry");
 
@@ -41,28 +57,16 @@ public class UpsideDown : MonoBehaviour
         }
 
         // answer에 따라 각 버튼의 img의 Rotation x 값을 180도로 설정
-        GameObject img_option_1 = GameObject.Find("UpsideDownCanvas/btn_option_1/img");
-        GameObject img_option_2 = GameObject.Find("UpsideDownCanvas/btn_option_2/img");
-        GameObject img_option_3 = GameObject.Find("UpsideDownCanvas/btn_option_3/img");
-
-        // 오브젝트를 찾았는지 확인
-        if (img_option_1 == null || img_option_2 == null || img_option_3 == null)
-        {
-            Debug.LogError("Can't find object");
-            return;
-        }
-
-        // answer에 따라 각 버튼의 img의 Rotation x 값을 180도로 설정
         switch (answer)
         {
             case 0:
-                img_option_1.transform.Rotate(180, 0, 0);
+                btn_option_1.GetComponent<UnityEngine.UI.Image>().sprite = upsideDownImg;
                 break;
             case 1:
-                img_option_2.transform.Rotate(180, 0, 0);
+                btn_option_2.GetComponent<UnityEngine.UI.Image>().sprite = upsideDownImg;
                 break;
             case 2:
-                img_option_3.transform.Rotate(180, 0, 0);
+                btn_option_3.GetComponent<UnityEngine.UI.Image>().sprite = upsideDownImg;
                 break;
         }
 
@@ -76,13 +80,13 @@ public class UpsideDown : MonoBehaviour
     public void CheckAnswer(int selected)
     {
         // 디버깅 메시지
-        Debug.Log("selected: " + selected + ", answer: " + answer);
+        // Debug.Log("selected: " + selected + ", answer: " + answer);
+        tryCount++;
 
-        // 정답 판정
+        // 정답 판정    
         if (selected == answer)
         {
             // 정답 판정 시, msg_congrate 오브젝트를 활성화
-            // GameObject msg_congrate = GameObject.Find("UpsideDownCanvas/msg_congrate");
             msg_congrate.SetActive(true);
 
             // msg_congrate 오브젝트를 1초 후 비활성화
@@ -93,13 +97,20 @@ public class UpsideDown : MonoBehaviour
                 yield return new WaitForSeconds(1.0f);
                 msg_congrate.SetActive(false);
             }
+            // 종료 시간 저장
+            endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
+
+            // DB에 저장하는 함수 호출
+            // attentionScore는 아직 미구현
+            // CalculateProgressScore("sp", 0, startTime, endTime, tryCount, concentrationScore, attentionScore );
+
+            // 게임 종료 코드 추가
 
         }
         // 오답 판정
         else
         {
             // 오답 판정 시, msg_retry 오브젝트를 활성화하고, 1초 후 비활성화
-            // GameObject msg_retry = GameObject.Find("UpsideDownCanvas/msg_retry");
             msg_retry.SetActive(true);
 
             StartCoroutine(DisableMsgRetry());
@@ -112,9 +123,4 @@ public class UpsideDown : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
