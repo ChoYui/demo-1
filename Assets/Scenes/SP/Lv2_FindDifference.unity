@@ -265,7 +265,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.32
+  m_Volume: 0.721
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1233,7 +1233,7 @@ MonoBehaviour:
   backgroundMusicSource: {fileID: 197153869}
   failSound: {fileID: 8300000, guid: 64754ba4ae533b242aab28fbff23f87a, type: 3}
   successSound: {fileID: 8300000, guid: 8806ce6fed17f364b80536a6cdfb419b, type: 3}
-  nextSceneName: 
+  nextSceneName: MainScene
 --- !u!114 &860038093
 MonoBehaviour:
   m_ObjectHideFlags: 0

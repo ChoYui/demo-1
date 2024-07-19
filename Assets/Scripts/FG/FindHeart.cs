@@ -115,6 +115,12 @@ public class FindHeart : MonoBehaviour
 
             endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
 
+            endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
+
+            // DB에 저장하는 함수 호출
+            // concentrationScore 아직 미구현
+            ProgressScoreManager.Instance.CalculateProgressScore("fg", 1, startTime, endTime, tryCount);
+
             // DB에 저장하는 함수 호출
             // concentrationScore 아직 미구현
             // CalculateProgressScore("fg", 1, startTime, endTime, tryCount, concentrationScore );
@@ -146,7 +152,7 @@ public class FindHeart : MonoBehaviour
         audioSource.clip = failSound;
         audioSource.Play();
          // 실패 음성 길이만큼 대기
-        yield return new WaitForSeconds(failSound.length);
+        yield return new WaitForSeconds(1.0f);
 
         msg_retry.SetActive(false);
     }

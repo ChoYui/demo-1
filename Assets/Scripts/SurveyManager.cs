@@ -8,13 +8,14 @@ using TMPro;
 
 public class SurveyManager : MonoBehaviour
 {
-    // Question_1 ~ Question_8 오브젝트를 배열로 저장
+    public static int initialProgressScore = 100;
     public GameObject Panel;
+
+    // Question_1 ~ Question_8 오브젝트를 배열로 저장
     private GameObject[] Questions;
-    public static int initialProgressScore = 0;
 
     // alert 창을 저장할 변수
-    private GameObject Alert;
+    public GameObject Alert;
 
     // 다음, 이전, 완료 버튼을 저장할 변수
     private Button NextButton;
@@ -46,9 +47,6 @@ public class SurveyManager : MonoBehaviour
         // 설문 결과 저장 배열 초기화
         SurveyResult = new int[8];
 
-        // alert 창을 찾아서 변수에 저장
-        Alert = GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/alert_popup");
-
         // QuestionIndex 변수 초기화
         QuestionIndex = 0;
 
@@ -65,9 +63,6 @@ public class SurveyManager : MonoBehaviour
         // 기본값으로 input_IQ, level_toggle 비활성화
         GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_2/input_IQ").SetActive(false);
         GameObject.Find("Main Camera/Canvas/SurveyPanel/bg_popup/Question_3/level_toggle").SetActive(false);
-
-        // alert 창 비활성화
-        Alert.SetActive(false);
 
         foreach (Toggle toggle in Q2_yes_no_Toggle.GetComponentsInChildren<Toggle>())
         {
@@ -276,7 +271,6 @@ public class SurveyManager : MonoBehaviour
         Alert.SetActive(false);
     }
 
-    // 완료 버튼을 누르면 실행되는 함수 선언
     public void FinishSurvey()
     {
         // 초기 100에서 설문조사로 구해진 뺄 값을 저장하는 변수

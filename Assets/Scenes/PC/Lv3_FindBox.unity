@@ -1301,7 +1301,7 @@ MonoBehaviour:
   backgroundMusicSource: {fileID: 1446201213}
   failSound: {fileID: 8300000, guid: ae7f2fe1f96c8294796b486f7398e729, type: 3}
   successSound: {fileID: 8300000, guid: c9a0aaaa532afaf468f2a70f6bb9ae85, type: 3}
-  nextSceneName: 
+  nextSceneName: MainScene
 --- !u!82 &860038093
 AudioSource:
   m_ObjectHideFlags: 0

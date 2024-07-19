@@ -9,6 +9,7 @@ using System;
 using UnityEngine.SceneManagement;
 
 
+
 public class FindGiraffeDiff : MonoBehaviour
 {
     // 초기 시간, 종료 시간을 저장 할 변수
@@ -134,11 +135,10 @@ public class FindGiraffeDiff : MonoBehaviour
             // 종료 시간 저장
             endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
 
-            // DB에 저장하는 함수 호출
-            // attentionScore는 아직 미구현
-            // CalculateProgressScore("fg", 2, startTime, endTime, tryCount, concentrationScore, attentionScore );
-
+            ProgressScoreManager.Instance.CalculateProgressScore("fg", 2, startTime, endTime, tryCount);
             // 게임 종료 코드 추가
+            SceneManager.LoadScene(nextSceneName);
+
         }
         // 오답 판정
         else

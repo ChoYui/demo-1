@@ -14,7 +14,6 @@ public class SignUpManager : MonoBehaviour
     FirebaseAuth auth;
     FirebaseFirestore db;
 
-
     private void Awake()
     {
         auth = FirebaseManager.Instance.Auth;
@@ -41,7 +40,7 @@ public class SignUpManager : MonoBehaviour
                 newUser.DisplayName, newUser.UserId);
             
             // Create Firestore document with the user's UID as the document ID
-            CreateUserDocument(newUser.UserId, nickname.text, SurveyManager.initialProgressScore);
+            CreateUserDocument(newUser.UserId, nickname.text, 0);
         });
     }
 
@@ -53,7 +52,7 @@ public class SignUpManager : MonoBehaviour
         var userData = new
         {
             nickname,
-            gen_prog,
+            gen_prog = SurveyManager.initialProgressScore,
             games = new
             {
                 vm = new { level = 0, star = 0, prog = 0 },
@@ -61,7 +60,8 @@ public class SignUpManager : MonoBehaviour
                 pc = new { level = 0, star = 0, prog = 0 },
                 sp = new { level = 0, star = 0, prog = 0 },
                 sr = new { level = 1, star = 0, prog = 0 },
-            }
+            },
+            tutorial = true
         };
 
         docRef.SetAsync(userData).ContinueWithOnMainThread(task =>

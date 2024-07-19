@@ -137,11 +137,8 @@ public class FindStar : MonoBehaviour
                 // 종료 시간 설정
                 endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
 
-                // 진척도 계산 함수 호출
-                // concentrationScore 아직 미구현
-                // CalculateProgressScore("fg", 0, startTime, endTime, tryCount, concentrationScore );
 
-                // 게임 종료 코드 추가
+                ProgressScoreManager.Instance.CalculateProgressScore("fg", 0, startTime, endTime, tryCount);
 
                 StartCoroutine(ShowEnd());
                 
@@ -184,7 +181,7 @@ public class FindStar : MonoBehaviour
         audioSource.clip = successSound;
         audioSource.Play();
          // 음성 길이만큼 대기
-        yield return new WaitForSeconds(successSound.length);
+        yield return new WaitForSeconds(1.0f);
 
         msg_congrate.SetActive(false);
     }
@@ -194,12 +191,14 @@ public class FindStar : MonoBehaviour
         audioSource.clip = failSound;
         audioSource.Play();
          // 실패 음성 길이만큼 대기
-        yield return new WaitForSeconds(failSound.length);
+        yield return new WaitForSeconds(1.0f);
 
         msg_retry.SetActive(false);
     }
     IEnumerator ShowEnd()
     {
+        msg_congrate.SetActive(false);
+        msg_retry.SetActive(false);
         backgroundMusicSource.Stop();
         audioSource.clip = endSound;
         audioSource.Play();

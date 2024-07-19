@@ -130,11 +130,10 @@ public class FindDiffSquirrel : MonoBehaviour
             endTime = int.Parse(DateTime.Now.ToString("HHmmss"));
 
             // DB에 저장하는 함수 호출
-            // attentionScore는 아직 미구현
-            // CalculateProgressScore("sr", 1, startTime, endTime, tryCount, concentrationScore, attentionScore );
+            ProgressScoreManager.Instance.CalculateProgressScore("sr", 1, startTime, endTime, tryCount);
 
             // 게임 종료 코드 추가
-            //SceneManager.LoadScene(nextSceneName);
+            SceneManager.LoadScene(nextSceneName);
 
         }
         // 오답 판정
@@ -151,7 +150,7 @@ public class FindDiffSquirrel : MonoBehaviour
                 audioSource.clip = failSound;
                 audioSource.Play();
                 // 실패 음성 길이만큼 대기
-                yield return new WaitForSeconds(failSound.length);
+                yield return new WaitForSeconds(1.0f);
 
                 msg_retry.SetActive(false);
             }

@@ -2,15 +2,19 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GazePointScript : MonoBehaviour
 {
     public GameObject gazePoint;     // UI element
     public GameObject targetObject;  // World space object
+
     public GameObject msg_congrate;
     public string nextSceneName; // 전환할 씬 이름
     public string panelName;
-    
+    public int level;
+
+
     public AudioSource backgroundMusicSource;
 
     public AudioClip endSound; // 애니메이션 종료 시 재생할 음성
@@ -21,8 +25,15 @@ public class GazePointScript : MonoBehaviour
     private Animator targetAnimator;
     private bool isAnimationEnded;
 
+    // 초기 시간, 종료 시간을 저장 할 변수
+    private int startTime;
+    private float endTime;
+
     void Start()
     {
+
+        startTime = int.Parse(DateTime.Now.ToString("HHmmss"));
+
         msg_congrate = GameObject.Find("msg_congrate");
 
         msg_congrate.SetActive(false);
@@ -125,7 +136,6 @@ public class GazePointScript : MonoBehaviour
         // 씬 전환
         SceneManager.LoadScene(nextSceneName);
     }
-
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // 씬 로드 완료 시 이벤트 구독 해제
@@ -153,6 +163,9 @@ public class GazePointScript : MonoBehaviour
         panel.SetActive(true);
         Debug.Log("Panel activated: " + panelName);
     }
+    
+
+    
     
 }
 
