@@ -2839,7 +2839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cfec581888f9ae45aadea99de6ba936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  introduceSound: {fileID: 8300000, guid: 731edddeb4a950045bfb2040b5636874, type: 3}
+  introduceSound: {fileID: 8300000, guid: c9f125147ac800b46b31d725c56d3272, type: 3}
   secondClip: {fileID: 8300000, guid: c64fe176182569144ba0b67454041f90, type: 3}
 --- !u!4 &774985046
 Transform:
